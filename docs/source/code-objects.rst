@@ -28,12 +28,12 @@ object and inspect its contents::
     >>> def add2(x):
     ...     return x + 2
     ...
-    >>> co = Code.from_pycode(add.__code__)
+    >>> co = Code.from_pycode(add2.__code__)
     >>> co.instrs
     (LOAD_FAST('x'), LOAD_CONST(2), BINARY_ADD, RETURN_VALUE)
     >>> co.argnames
     ('x',)
-    >>> c.consts
+    >>> co.consts
     (2,)
 
 We can convert our Code object back into its raw form via the
