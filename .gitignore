@@ -64,3 +64,6 @@ MANIFEST
 .cache
 
 htmlcov
+
+# intellij
+.idea/
