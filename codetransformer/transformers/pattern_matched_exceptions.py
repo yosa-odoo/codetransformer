@@ -85,7 +85,7 @@ class pattern_matched_exceptions(CodeTransformer):
             yield CALL_FUNCTION_VAR(1)
 
         del CALL_FUNCTION_VAR
-    else:
+    elif sys.version_info < (3, 9):
         from ..instructions import (
             CALL_FUNCTION_EX,
             BUILD_TUPLE_UNPACK_WITH_CALL,

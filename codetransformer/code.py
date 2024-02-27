@@ -307,6 +307,7 @@ class Code:
         '_instrs',
         '_argnames',
         '_argcount',
+        '_posonlyargcount',
         '_kwonlyargcount',
         '_cellvars',
         '_freevars',
@@ -334,6 +335,7 @@ class Code:
 
         # The starting varnames (the names of the arguments to the function)
         argcount = [0]
+        posonlyargcount = [0]
         kwonlyargcount = [0]
         argcounter = argcount  # Which set of args are we currently counting.
         _argnames = []
@@ -377,6 +379,7 @@ class Code:
         self._instrs = instrs
         self._argnames = tuple(_argnames)
         self._argcount = argcount[0]
+        self._posonlyargcount = posonlyargcount[0]
         self._kwonlyargcount = kwonlyargcount[0]
         self._cellvars = cellvars
         self._freevars = freevars
@@ -583,6 +586,7 @@ class Code:
 
         return CodeType(
             self.argcount,
+            self.posonlyargcount,
             self.kwonlyargcount,
             len(varnames),
             self.stacksize,
@@ -598,6 +602,28 @@ class Code:
             freevars,
             cellvars,
         )
+    # to be correct in python 3.10
+    # elif sys.version_info >= (3, 10):
+    #     def __new__(
+    #         cls,
+    #         __argcount: int, ok
+    #         __posonlyargcount: int, NOK
+    #         __kwonlyargcount: int, ok
+    #         __nlocals: int, ok
+    #         __stacksize: int, ok
+    #         __flags: int, ok
+    #         __codestring: bytes, OK?
+    #         __constants: tuple[object, ...], ok
+    #         __names: tuple[str, ...], ok
+    #         __varnames: tuple[str, ...], ok
+    #         __filename: str, ok
+    #         __name: str, ok
+    #         __firstlineno: int, ok
+    #         __linetable: bytes, ok
+    #         __freevars: tuple[str, ...] = ..., ok
+    #         __cellvars: tuple[str, ...] = ..., ok
+    #     ) -> Self: ...
+
 
     @property
     def instrs(self):
@@ -621,6 +647,12 @@ class Code:
         This does not include varargs (\*args).
         """
         return self._argcount
+
+    @property
+    def posonlyargcount(self):
+        """The number of arguments this code object accepts.
+        """
+        return self._posonlyargcount
 
     @property
     def kwonlyargcount(self):
