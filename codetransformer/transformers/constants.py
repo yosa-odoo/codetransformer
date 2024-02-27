@@ -117,7 +117,7 @@ class asconstants(CodeTransformer):
             )
         return super().transform(code, **kwargs)
 
-    @pattern(LOAD_NAME | LOAD_GLOBAL | LOAD_DEREF | LOAD_CLASSDEREF)
+    @pattern(LOAD_NAME or LOAD_GLOBAL or LOAD_DEREF or LOAD_CLASSDEREF)
     def _load_name(self, instr):
         name = instr.arg
         if name not in self._constnames:
@@ -127,8 +127,8 @@ class asconstants(CodeTransformer):
         yield LOAD_CONST(self._constnames[name]).steal(instr)
 
     _store = pattern(
-        STORE_NAME | STORE_GLOBAL | STORE_DEREF | STORE_FAST,
+        STORE_NAME or STORE_GLOBAL or STORE_DEREF or STORE_FAST,
     )(_assign_or_del('assign to'))
     _delete = pattern(
-        DELETE_NAME | DELETE_GLOBAL | DELETE_DEREF | DELETE_FAST,
+        DELETE_NAME or DELETE_GLOBAL or DELETE_DEREF or DELETE_FAST,
     )(_assign_or_del('delete'))
